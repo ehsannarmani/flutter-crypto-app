@@ -1,10 +1,8 @@
 
+import 'package:crypto_app/logic/bloc/home/home_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../../logic/providers/crypto_api_provider.dart';
-import '../../../../../logic/providers/home_choices_provider.dart';
-import '../../../ui_helper/theme_switcher.dart';
 
 class ChoiceData {
   int id;
@@ -26,13 +24,16 @@ class HomeChoices extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    CryptoApiProvider cryptoApiProvider = Provider.of(context);
+    HomeBloc homeBloc = BlocProvider.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: [
-          Consumer<HomeChoicesProvider>(
-            builder: (context, provider, child) {
+          BlocBuilder<HomeBloc,HomeState>(
+            buildWhen: (preState,newState){
+              return preState.marketTypeChoiceIndex != newState.marketTypeChoiceIndex;
+            },
+            builder: (context,state){
               return Wrap(
                 spacing: 10,
                 children: List.generate(data.length, (index) {
@@ -48,29 +49,20 @@ class HomeChoices extends StatelessWidget {
                       color: Colors.white,
                     ),
                     elevation: 3,
-                    selected: provider.selectedChoice == index,
+                    selected: state.marketTypeChoiceIndex == index,
                     selectedColor: Theme.of(context).primaryColorDark,
                     onSelected: (selected) {
                       if (selected) {
-                        provider.selectChoice(index);
+                        homeBloc.add(ChangeMarketTypeEvent(index: index));
                         switch(index){
                           case 0:
-                            cryptoApiProvider.getMarket(
-                                forceShowLoading: true,
-                                market: Market.TopMarketCap
-                            );
+                            homeBloc.add(GetMarketEvent(market: Market.TopMarketCap));
                             break;
                           case 1:
-                            cryptoApiProvider.getMarket(
-                                forceShowLoading: true,
-                                market: Market.TopGainers
-                            );
+                            homeBloc.add(GetMarketEvent(market: Market.TopGainers));
                             break;
                           case 2:
-                            cryptoApiProvider.getMarket(
-                                forceShowLoading: true,
-                                market: Market.TopLosers
-                            );
+                            homeBloc.add(GetMarketEvent(market: Market.TopLosers));
                             break;
                         }
                         if (onSelected != null) {

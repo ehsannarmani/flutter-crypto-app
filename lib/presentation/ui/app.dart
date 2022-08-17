@@ -1,11 +1,12 @@
+import 'package:crypto_app/logic/bloc/app/app_bloc.dart';
 import 'package:crypto_app/presentation/ui/pages/main_page.dart';
 import 'package:crypto_app/presentation/ui/pages/signup_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../logic/providers/theme_provider.dart';
 import '../utils/constants.dart';
+import '../utils/theme.dart';
 
 
 class App extends StatelessWidget {
@@ -13,12 +14,15 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (context,provider,child){
+    return BlocBuilder<AppBloc,AppState>(
+      buildWhen: (preState,newState){
+        return preState.darkModeEnabled != newState.darkModeEnabled;
+      },
+      builder: (context,state){
         return MaterialApp(
           theme: MyThemes.lightTheme,
           darkTheme: MyThemes.darkTheme,
-          themeMode: provider.isDarkMode ?  ThemeMode.dark : ThemeMode.light,
+          themeMode: state.darkModeEnabled ?  ThemeMode.dark : ThemeMode.light,
           debugShowCheckedModeBanner: false,
           home: FutureBuilder<SharedPreferences>(
             future: SharedPreferences.getInstance(),
@@ -31,7 +35,7 @@ class App extends StatelessWidget {
                   return SignUpPage();
                 }
               }else{
-                return Scaffold();
+                return const Scaffold();
               }
             },
           ),

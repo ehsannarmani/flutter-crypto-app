@@ -4,7 +4,8 @@ import '../data_source/app_api.dart';
 
 class CryptoRepo{
 
-  final AppApi _api = AppApi();
+  final AppApi _api;
+  CryptoRepo(this._api);
 
   Future<CryptoModel?> getTopMarketCap({int count = 10,int start = 1}) async{
     var result = await _api.getTopMarketCap(count: count,start: start);

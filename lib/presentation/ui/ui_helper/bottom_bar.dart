@@ -1,8 +1,6 @@
+import 'package:crypto_app/logic/bloc/app/app_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../../logic/providers/bottom_bar_provider.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BottomBar extends StatelessWidget {
   var onTap;
@@ -13,8 +11,11 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Consumer<BottomBarProvider>(
-      builder: (context, provider, child) {
+    return BlocBuilder<AppBloc,AppState>(
+      buildWhen: (preState,newState){
+        return preState.bottomBarIndex != newState.bottomBarIndex;
+      },
+      builder: (context,state){
         return BottomAppBar(
           shape: const CircularNotchedRectangle(),
           notchMargin: 5,
@@ -35,14 +36,14 @@ class BottomBar extends StatelessWidget {
                           onTap(0);
                         },
                         icon: const Icon(Icons.home_rounded),
-                        color: provider.index == 0 ? Colors.white : Colors.white60,
+                        color: state.bottomBarIndex == 0 ? Colors.white : Colors.white60,
                       ),
                       IconButton(
                         onPressed: () {
                           onTap(1);
                         },
                         icon: const Icon(Icons.bar_chart),
-                        color: provider.index == 1 ? Colors.white : Colors.white60,
+                        color: state.bottomBarIndex == 1 ? Colors.white : Colors.white60,
                       ),
                     ],
                   ),
@@ -58,14 +59,14 @@ class BottomBar extends StatelessWidget {
                           onTap(2);
                         },
                         icon: const Icon(Icons.person),
-                        color: provider.index == 2 ? Colors.white : Colors.white60,
+                        color: state.bottomBarIndex == 2 ? Colors.white : Colors.white60,
                       ),
                       IconButton(
                         onPressed: () {
                           onTap(3);
                         },
                         icon: const Icon(Icons.bookmark),
-                        color:provider.index == 3 ? Colors.white : Colors.white60,
+                        color:state.bottomBarIndex == 3 ? Colors.white : Colors.white60,
                       ),
                     ],
                   ),
@@ -74,6 +75,7 @@ class BottomBar extends StatelessWidget {
             ),
           ),
         );
+
       },
     );
   }

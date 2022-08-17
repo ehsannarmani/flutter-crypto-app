@@ -1,18 +1,15 @@
 import 'dart:io';
 
-
+import 'package:crypto_app/logic/bloc/home/home_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../data/data_source/base_model.dart';
 import '../../../../data/models/crypto_model.dart';
-import '../../../../logic/providers/crypto_api_provider.dart';
 
-
-import '../../../../logic/providers/home_choices_provider.dart';
 import 'crypto_shimmer.dart';
 import 'crypto.dart';
-
 
 class CryptoMarket extends StatefulWidget {
   const CryptoMarket({Key? key}) : super(key: key);
@@ -22,46 +19,41 @@ class CryptoMarket extends StatefulWidget {
 }
 
 class _CryptoMarketState extends State<CryptoMarket> {
-
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    CryptoApiProvider cryptoApiProvider = Provider.of(context, listen: false);
-    cryptoApiProvider.getMarket();
+    BlocProvider.of<HomeBloc>(context)
+        .add(GetMarketEvent(market: Market.TopMarketCap));
   }
 
   @override
   Widget build(BuildContext context) {
-    CryptoApiProvider cryptoApiProvider = Provider.of(context);
-    HomeChoicesProvider homeChoicesProvider = Provider.of(context);
-    Future<void> onRefresh()async {
-      switch(homeChoicesProvider.selectedChoice){
+    Future<void> onRefresh() async {
+      HomeBloc homeBloc = BlocProvider.of(context);
+      int marketTypeChoiceIndex = homeBloc.state.marketTypeChoiceIndex;
+      switch (marketTypeChoiceIndex) {
         case 0:
-         await cryptoApiProvider.getMarket(
-              forceShowLoading: true,
-              market: Market.TopMarketCap
-          );
+          homeBloc.add(GetMarketEvent(market: Market.TopMarketCap,showLoading: false));
           break;
         case 1:
-          await cryptoApiProvider.getMarket(
-              forceShowLoading: true,
-              market: Market.TopGainers
-          );
+          homeBloc.add(GetMarketEvent(market: Market.TopGainers,showLoading: false));
           break;
         case 2:
-          await cryptoApiProvider.getMarket(
-              forceShowLoading: true,
-              market: Market.TopLosers
-          );
+          homeBloc.add(GetMarketEvent(market: Market.TopLosers,showLoading: false));
           break;
       }
     }
-    return Consumer<CryptoApiProvider>(
-      builder: (context, provider, child) {
-        switch (provider.topMarketCap?.status) {
-          case ResponseStatus.Loading: return CryptoShimmer();
+
+    return BlocBuilder<HomeBloc, HomeState>(
+      buildWhen: (preState,newState){
+        return preState.cryptoData != newState.cryptoData;
+      },
+      builder: (context, state) {
+        BaseModel<CryptoModel> cryptoData = state.cryptoData;
+        switch (cryptoData.status) {
+          case ResponseStatus.Loading:
+            return CryptoShimmer();
           case ResponseStatus.Success:
             return RefreshIndicator(
               onRefresh: onRefresh,
@@ -69,17 +61,16 @@ class _CryptoMarketState extends State<CryptoMarket> {
               color: Colors.white,
               child: ListView.builder(
                 physics: const BouncingScrollPhysics(),
-                itemCount: provider
-                    .topMarketCap!.data.data.cryptoCurrencyList.length,
+                itemCount: cryptoData.data.data.cryptoCurrencyList.length,
                 itemBuilder: (context, index) {
-                  CryptoCurrencyList crypto = provider.topMarketCap
-                      !.data.data.cryptoCurrencyList[index];
+                  CryptoCurrencyList crypto =
+                      cryptoData.data.data.cryptoCurrencyList[index];
                   return Crypto(crypto: crypto);
                 },
               ),
             );
-          case ResponseStatus.Failed: return const Text("Failed...");
-          default: return Container();
+          case ResponseStatus.Failed:
+            return const Text("Failed...");
         }
       },
     );

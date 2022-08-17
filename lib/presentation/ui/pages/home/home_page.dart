@@ -1,9 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
-
-import '../../../../logic/providers/crypto_api_provider.dart';
 import '../../ui_helper/crypto/crypto_market.dart';
 import 'helper/home_banners.dart';
 import 'helper/home_buttons.dart';
@@ -24,7 +20,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    CryptoApiProvider cryptoApiProvider = Provider.of(context);
     return SizedBox(
       width: double.infinity,
       height: double.infinity,

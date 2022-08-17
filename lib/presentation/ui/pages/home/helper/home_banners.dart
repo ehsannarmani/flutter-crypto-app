@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:crypto_app/data/models/banner_model.dart';
+import 'package:crypto_app/logic/bloc/home/home_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../data/data_source/base_model.dart';
-import '../../../../../logic/providers/banner_api_provider.dart';
 import '../../../ui_helper/image_pager.dart';
 
 class HomeBanners extends StatefulWidget {
@@ -19,15 +21,17 @@ class _HomeBannersState extends State<HomeBanners> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    BannerApiProvider bannerApiProvider = Provider.of(context, listen: false);
-
-    bannerApiProvider.getBanners();
+    BlocProvider.of<HomeBloc>(context).add(GetBannersEvent());
   }
   @override
   Widget build(BuildContext context) {
-    return Consumer<BannerApiProvider>(
-      builder: (context, provider, child) {
-        switch (provider.data?.status) {
+    return BlocBuilder<HomeBloc,HomeState>(
+      buildWhen: (preState,newState){
+        return preState.bannerData != newState.bannerData;
+      },
+      builder: (context,state){
+        BaseModel<BannerModel> bannerData = state.bannerData;
+        switch (bannerData.status) {
           case ResponseStatus.Loading:
             return Padding(
               padding: const EdgeInsets.only(top: 10),
@@ -67,12 +71,12 @@ class _HomeBannersState extends State<HomeBanners> {
           case ResponseStatus.Success:
             return ImagePager(
               pages:
-              provider.data!.data.data.map((e) => e.imgSrc).toList(),
+              bannerData.data.data.map((e) => e.imgSrc).toList(),
               pagerType: PagerType.Online,
             );
           case ResponseStatus.Failed:
-            return Text("Failed...");
-            default: return Container();
+            return const Text("Failed...");
+          default: return Container();
         }
       },
     );

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/constants.dart';
@@ -132,7 +133,8 @@ class SignUpPage extends StatelessWidget {
                                 } else {
                                   return null;
                                 }
-                              });
+                              }
+                                );
                         },
                       ),
                       const SizedBox(
@@ -154,7 +156,12 @@ class SignUpPage extends StatelessWidget {
                               pref.setBool(Constants.USER_LOGGED_IN, true);
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context)=>MainPage())
+                                  PageTransition(
+                                      type: PageTransitionType.fade,
+                                      child: MainPage(),
+                                      duration: const Duration(milliseconds: 400),
+                                      curve: Curves.easeInOut
+                                  )
                               );
                             }
                           },
