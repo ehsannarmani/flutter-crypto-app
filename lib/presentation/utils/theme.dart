@@ -14,6 +14,8 @@ class MyThemes {
           backgroundColor: Color.fromRGBO(34, 164, 239, 1)),
       drawerTheme:
       const DrawerThemeData(backgroundColor: Color.fromRGBO(25, 36, 54, 1)),
+      indicatorColor: Colors.white,
+      dividerColor: Colors.white.withOpacity(.2),
       textTheme: TextTheme(
         headline1: GoogleFonts.signikaNegative(fontSize: 20),
         headline2: GoogleFonts.signikaNegative(fontSize: 18),
@@ -25,6 +27,8 @@ class MyThemes {
         bodyText1: GoogleFonts.ubuntu(fontSize: 26,color: Colors.white),
         bodyText2: GoogleFonts.ubuntu(fontSize: 22,color: Colors.grey.shade300),
         labelMedium: GoogleFonts.ubuntu(fontSize: 14,color: Colors.white),
+        headlineLarge: GoogleFonts.signikaNegative(fontSize: 24),
+
 
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -33,7 +37,8 @@ class MyThemes {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               textStyle: GoogleFonts.ubuntu()
           )
-      )
+      ),
+    focusColor: Colors.white
   );
 
   static final lightTheme = ThemeData.light().copyWith(
@@ -42,10 +47,12 @@ class MyThemes {
       primaryColor: Colors.blue,
       primaryColorDark: Colors.blue[700],
       highlightColor: Colors.blue.withOpacity(.9),
-      floatingActionButtonTheme:
+    dividerColor: Colors.grey.withOpacity(.3),
+    floatingActionButtonTheme:
       FloatingActionButtonThemeData(backgroundColor: Colors.blue[700]),
-      primaryColorLight: Colors.blue[300],
-      textTheme: TextTheme(
+    indicatorColor: Colors.blue,
+    primaryColorLight: Colors.blue[300],
+    textTheme: TextTheme(
         headline1: GoogleFonts.signikaNegative(fontSize: 20),
         headline2: GoogleFonts.signikaNegative(fontSize: 18),
         headline3: GoogleFonts.signikaNegative(fontSize: 16),
@@ -55,9 +62,10 @@ class MyThemes {
         subtitle2: GoogleFonts.signikaNegative(
             fontSize: 12, color: Colors.grey.shade400
         ),
-        bodyText1: GoogleFonts.ubuntu(fontSize: 26,color: Colors.black),
+        bodyText1: GoogleFonts.ubuntu(fontSize: 26,color: Color(0xff313131)),
         bodyText2: GoogleFonts.ubuntu(fontSize: 22,color: Colors.black.withOpacity(.8)),
         labelMedium: GoogleFonts.ubuntu(fontSize: 14,color: Colors.black.withOpacity(.9)),
+        headlineLarge: GoogleFonts.signikaNegative(fontSize: 24),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -66,6 +74,7 @@ class MyThemes {
               textStyle: GoogleFonts.ubuntu()
 
           )
-      )
+      ),
+      focusColor: Colors.black
   );
 }

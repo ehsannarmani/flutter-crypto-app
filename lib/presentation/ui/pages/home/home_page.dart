@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import '../../ui_helper/crypto/crypto_market.dart';
 import 'helper/home_banners.dart';
-import 'helper/home_buttons.dart';
 import 'helper/home_choices.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,8 +25,6 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         children: [
           const HomeBanners(),
-          const SizedBox(height: 20),
-          const HomeButtons(),
           const SizedBox(height: 20),
           HomeChoices(),
           const Expanded(

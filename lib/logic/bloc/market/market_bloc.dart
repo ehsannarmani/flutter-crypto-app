@@ -13,7 +13,9 @@ class MarketBloc extends Bloc<MarketEvent, MarketState> {
   final CryptoRepo _cryptoRepo;
   MarketBloc(this._cryptoRepo) : super(MarketState(cryptoData: BaseModel.loading(),activeChoice: 0)) {
     on<GetMarketEvent>((event, emit) async {
-      emit(state.copyWith(cryptoData: BaseModel.loading()));
+      if(!event.refresh){
+        emit(state.copyWith(cryptoData: BaseModel.loading()));
+      }
       try{
         var response = await _cryptoRepo.getTopMarketCap(count: event.count);
         if(response != null){

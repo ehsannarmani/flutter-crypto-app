@@ -32,6 +32,7 @@ class MainPage extends StatelessWidget {
         onPageChanged: (index) {
           BlocProvider.of<AppBloc>(context).add(UpdateBottomBarEvent(index));
         },
+
       ),
       bottomNavigationBar: BottomBar(
         onTap: (index) {
@@ -42,12 +43,6 @@ class MainPage extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.currency_exchange, color: Colors.white,),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation
-          .centerDocked,
     );
   }
 }

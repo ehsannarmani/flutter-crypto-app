@@ -5,6 +5,7 @@ import 'package:crypto_app/data/data_source/base_model.dart';
 import 'package:crypto_app/data/models/banner_model.dart';
 import 'package:crypto_app/data/models/crypto_model.dart';
 import 'package:crypto_app/data/repository/crypto_repo.dart';
+import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 
 import '../../../data/repository/banner_repo.dart';

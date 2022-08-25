@@ -5,12 +5,18 @@ import 'package:crypto_app/logic/bloc/market/market_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:mrx_charts/mrx_charts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/data_source/base_model.dart';
 import '../../../data/models/crypto_model.dart';
+import '../../../di.dart';
+import '../../../logic/bloc/crypto/crypto_bloc.dart';
 import '../ui_helper/crypto/crypto.dart';
 import '../ui_helper/crypto/crypto_shimmer.dart';
+import 'crypto_page.dart';
 
 class CurrencyChoice {
   String currency;
@@ -40,7 +46,7 @@ class _MarketPageState extends State<MarketPage> {
 
     marketBloc.add(GetMarketEvent());
     Timer.periodic(const Duration(seconds: 20), (timer) {
-      marketBloc.add(GetMarketEvent());
+      marketBloc.add(GetMarketEvent(refresh: true));
     });
   }
 
@@ -131,6 +137,9 @@ class _MarketPageState extends State<MarketPage> {
                         percentChange: quote.percentChange24h,
                         pricePrefix:
                         quote.name == "USD" ? "\$" : " ${quote.name}",
+                        onTap: (){
+                          CryptoPage.navigate(context, crypto);
+                        },
                       );
                     },
                   );
@@ -145,4 +154,5 @@ class _MarketPageState extends State<MarketPage> {
       ],
     );
   }
+
 }

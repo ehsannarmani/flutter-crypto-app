@@ -5,7 +5,8 @@ abstract class MarketEvent {}
 
 class GetMarketEvent extends MarketEvent{
   int count;
-  GetMarketEvent({this.count = 500});
+  bool refresh;
+  GetMarketEvent({this.count = 500,this.refresh = false});
 }
 class UpdateChoiceEvent extends MarketEvent{
   int index;

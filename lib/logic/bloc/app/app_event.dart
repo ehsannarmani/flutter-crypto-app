@@ -8,4 +8,6 @@ class UpdateBottomBarEvent extends AppEvent{
   UpdateBottomBarEvent(this.index);
 }
 class UpdateAppThemeEvent extends AppEvent{
+  bool? darkMode;
+  UpdateAppThemeEvent({this.darkMode});
 }

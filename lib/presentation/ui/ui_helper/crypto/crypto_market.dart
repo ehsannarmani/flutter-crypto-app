@@ -1,13 +1,17 @@
 import 'dart:io';
 
 import 'package:crypto_app/logic/bloc/home/home_bloc.dart';
+import 'package:crypto_app/presentation/ui/pages/crypto_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../data/data_source/base_model.dart';
 import '../../../../data/models/crypto_model.dart';
 
+import '../../../../di.dart';
+import '../../../../logic/bloc/crypto/crypto_bloc.dart';
 import 'crypto_shimmer.dart';
 import 'crypto.dart';
 
@@ -65,7 +69,9 @@ class _CryptoMarketState extends State<CryptoMarket> {
                 itemBuilder: (context, index) {
                   CryptoCurrencyList crypto =
                       cryptoData.data.data.cryptoCurrencyList[index];
-                  return Crypto(crypto: crypto);
+                  return Crypto(crypto: crypto,onTap: (){
+                    CryptoPage.navigate(context, crypto);
+                  },);
                 },
               ),
             );
